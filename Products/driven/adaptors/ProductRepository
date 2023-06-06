@@ -1,0 +1,25 @@
+
+const findBuilder = ({ dao }) => async (id) => {
+  const dbItem = await dao.getProduct(id)
+  
+  return dbItem
+}
+const saveBuilder = ({ dao }) => async (Product) => {
+  const savedItem = Product.id
+    ? await dao.updateProduct(Product)
+    : await dao.createProduct(Product)
+
+  
+  return savedItem
+}
+const removeBuilder = ({ dao }) => async (id) => {
+ 
+  return dao.deleteProduct(id)
+}
+const createProductRepository = (dependencies) => ({
+  find: findBuilder(dependencies),
+  save: saveBuilder(dependencies),
+  remove: removeBuilder(dependencies),
+})
+module.exports = createProductRepository
+

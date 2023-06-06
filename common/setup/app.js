@@ -1,18 +1,13 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+const Koa = require('koa')
+const bodyParser = require('koa-bodyparser')
+const { handleError } = require('./ControllerHandler')
 
-const app =express();
-
-app.use(express.json());
-app.use(bodyParser.urlencoded({extended:true}));
-
-// route imports
-const product = require("../../Products/drivers/actors/ProductRouter");
-
-
-app.use("/api/v1",product);
-
-//Middleware for error
-//app.use(errorMiddleware);
-
-module.exports = app;
+const App = (router) => {
+  const app = new Koa();
+  app.use(async (context, next) => next().catch((err) => handleError(err, context)))
+  app.use(bodyParser())
+  app.use(router.routes())
+  app.use(router.allowedMethods())
+  return app
+}
+module.exports = App

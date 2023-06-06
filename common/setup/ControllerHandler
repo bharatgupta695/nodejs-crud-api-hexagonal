@@ -1,0 +1,28 @@
+const ErrorHandler = require('../utils/ErrorHandler')
+
+exports.useController = async (context, controllerFn) => {
+  context.data = { ...context.request.body, ...context.params, ...context.query }
+ 
+  try {
+    const result = await controllerFn(context)
+    if (result) {
+      if (result.status) {
+        context.status = result.status
+      }
+      if (result.status !== 204) {
+        context.body = result
+      }
+    }
+    return result
+  } catch (err) {
+    return this.handleError(err, context)
+  }
+}
+
+exports.handleError = (error, context) => {
+  let message = 'Unhandled Error'
+  let status = 500
+  
+
+  return new ErrorHandler(message, status);
+}

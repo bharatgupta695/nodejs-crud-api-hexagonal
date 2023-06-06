@@ -1,20 +1,13 @@
-const {createProduct, updateProduct, deleteProduct, getProduct} = require("../../business/ProductService");
+const Router = require('koa-router')
+const { useController } = require('../../../common/setup/ControllerHandler')
 
-const express = require("express");
+const createProductRouter = ({ controller }) => {
+  const router = new Router({ prefix: '/api/v1/products' })
+  router.get('/:id', (context) => useController(context,  controller.getProduct))
+  router.post('/', (context) => useController(context, controller.createProduct))
+  router.put('/:id', (context) => useController(context, controller.updateProduct))
+  router.delete('/:id', (context) => useController(context, controller.deleteProduct))
+  return router
+}
+module.exports = createProductRouter
 
-const router = express.Router();
-
-
-router.route("/product/new").post(createProduct);
-
-router.route("/product/:id")
-.put(updateProduct)
-.delete(deleteProduct)
-
-router.route("/product/:id").get(getProduct);
-
-
-
-
-
-module.exports = router;

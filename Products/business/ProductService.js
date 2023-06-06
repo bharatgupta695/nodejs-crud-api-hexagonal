@@ -1,81 +1,49 @@
 
-const Product = require("../driven/actors/productModel");
-//const catchAsyncErrors = require("../../common/middlewares/catchAsyncErrors");
-
-// Create Product 
-exports.createProduct = async(req,res,next) => {
-
-
+const ErrorHandler = require('../../common/utils/ErrorHandler')
    
-   const product = await Product.create(req.body);
-   
-
-   res.status(201).json({
-      success:true,
-      product
-   });
-};
+const getProductBuilder = ({ repository }) => async (id) => {
+  
+  // some logic here
+  const Product = await repository.find(id)
+  if(!Product) {
+    return new ErrorHandler(400, 'Product not found');
+  }
+  // more logic here
+  return Product
+}
+const createProductBuilder = ({ repository, validator }) => async (data) => {
+  
+  // some logic here
+  const Product = await repository.save(data)
+  if(!Product) {
+     return(new ErrorHandler(400, 'Product not created'));
+  }
+  // more logic here
+  return Product
+}
+const updateProductBuilder = ({ repository, validator }) => async (data) => {
+  
+  // some logic here
+  const Product = await repository.save(data)
+  if(!Product) {
+    return new ErrorHandler(400, 'Product not updated');
+  }
+  // more logic here
+  return Product
+}
+const deleteProductBuilder = ({ repository}) => async (id) => {
  
+  const result = await repository.remove(id)
+  if(!result) {
+    return new ErrorHandler(400, 'Product not deleted');
+  }
+  return true;
+}
 
-
-
-//Get Product Details
- 
-exports.getProduct =async (req,res,next) =>{
- 
- // try {
-   const product = await Product.findById(req.params.id);
-   
-   if (product) {
-     return  res.status(200).json({
-         success:true,
-         product,
-      }); 
-   } else {
-      return next(new ErrorHandler("Product Not Found",404));
-   }
-
-};
-
-// Update Products 
-
-exports.updateProduct = async(req,res) =>{
-   let product =  await Product.findById(req.params.id);
-
-   if(!product){
-      return res.status(500).json({
-         success:false,
-         message:"Product Not found"
-      })
-   }
-
-   product  = await Product.findByIdAndUpdate(req.params.id,req.body,{
-      new:true,
-      runValidators:true,
-      useFindAndModify:false
-   });
-   res.status(200).json({
-      success:true,
-      product
-   })
-} ;
-
-//Delete Products
-
-exports.deleteProduct = async(req,res,next) =>{
-
-   const product = Product.findById(req.params.id);
-
-   if(!product){
-      return res.status(200).json({
-         success:false,
-         message:"Product Not found"
-      })
-   }
-   await product.findOneAndRemove()  ;
-
-   res.status(200).json({
-      success:true,
-      message:"Product Deleted Successfully"
-   })
-};
+const createProductService = (dependencies) => ({
+  getProduct: getProductBuilder(dependencies),
+  createProduct: createProductBuilder(dependencies),
+  updateProduct: updateProductBuilder(dependencies),
+  deleteProduct: deleteProductBuilder(dependencies),
+})
+module.exports = createProductService
