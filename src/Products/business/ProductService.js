@@ -11,7 +11,7 @@ const getProductBuilder = ({ repository }) => async (id) => {
   // more logic here
   return Product
 }
-const createProductBuilder = ({ repository, validator }) => async (data) => {
+const createProductBuilder = ({ repository }) => async (data) => {
   
   // some logic here
   const Product = await repository.save(data)
@@ -21,7 +21,7 @@ const createProductBuilder = ({ repository, validator }) => async (data) => {
   // more logic here
   return Product
 }
-const updateProductBuilder = ({ repository, validator }) => async (data) => {
+const updateProductBuilder = ({ repository }) => async (data) => {
   
   // some logic here
   const Product = await repository.save(data)

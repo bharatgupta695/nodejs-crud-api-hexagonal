@@ -2,11 +2,11 @@
   "name": "hexagonalarchitectureimplementation",
   "version": "1.0.0",
   "description": "",
-  "main": "Products/drivers/actors/server.js",
+  "main": "src/Products/drivers/actors/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node Products/drivers/actors/server.js",
-    "dev": "nodemon Products/drivers/actors/server.js"
+    "start": "node src/Products/drivers/actors/server.js",
+    "dev": "nodemon src/Products/drivers/actors/server.js"
   },
   "author": "",
   "license": "ISC",

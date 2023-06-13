@@ -1,3 +1,4 @@
+// Drivers - input ports
 const App = require('../../../common/setup/app')
 const createProductRouter = require('./ProductRouter')
 const dependencies = require('./CompositionRoot')
